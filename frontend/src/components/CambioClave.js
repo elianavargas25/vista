@@ -6,10 +6,9 @@ import axios from 'axios'
 export default class CreateNote extends Component {
 
     state = {
-        Description: '',
-        valor: '',
-        date: new Date(),
-        tipo: '',
+        clave: '',
+        claveNueva: '',
+        claveNueva2: '',
         editing: false,
         _id: ''
     }
@@ -20,10 +19,9 @@ export default class CreateNote extends Component {
             const res = await axios.get('https://finanzas-app.mileidyramos23171.now.sh/api/ingresos/' + this.props.match.params.id);
             console.log(res.data)
             this.setState({
-                Description: res.data.Description,
-                valor: res.data.valor,
-                date: new Date(res.data.date),
-                tipo: res.data.tipo,
+                clave: res.data.clave,
+                claveNueva: res.data.claveNueva,
+                claveNueva2: res.data.claveNueva2,
                 _id: res.data._id,
                 editing: true
             });
@@ -34,24 +32,22 @@ export default class CreateNote extends Component {
         e.preventDefault();
         if (this.state.editing) {
             const updatedNote = {
-                Description: this.state.Description,
-                valor: this.state.valor,
-                tipo: this.state.tipo,
-                date: this.state.date
+                clave: this.state.clave,
+                claveNueva: this.state.claveNueva,
+                claveNueva2: this.state.claveNueva2
             };
             await axios.put('https://finanzas-app.mileidyramos23171.now.sh/api/ingresos/' + this.state._id, updatedNote);
         } else {
             // const newNote = {
-            //     Description: this.state.Description,
-            //     valor: this.state.valor,
-            //     tipo: this.state.tipo,
+            //     clave: this.state.clave,
+            //     claveNueva: this.state.claveNueva,
+            //     claveNueva2: this.state.claveNueva2,
             //     date: this.state.date
             // };
             await axios.post('https://finanzas-app.mileidyramos23171.now.sh/api/ingresos/', {
-                Description: this.state.Description,
-                valor: this.state.valor,
-                tipo: this.state.tipo,
-                date: this.state.date
+                clave: this.state.clave,
+                claveNueva: this.state.claveNueva,
+                claveNueva2: this.state.claveNueva2
             })
 
                 .then(profile => alert('Ingreso create <3'))
@@ -77,54 +73,48 @@ export default class CreateNote extends Component {
         return (
             <div className="col-md-6 offset-md-3">
                 <div className="card card-body">
-                    <h4>Nuevo Ingreso</h4>
+                    <h4>Cambiar Contraseña</h4>
                     <form onSubmit={this.onSubmit}>
                         {/* SELECT THE USER */}
-                        <div className="form-group">
-                            <select
-                                className="form-control"
-                                value={this.state.tipo}
-                                onChange={this.onInputChange}
-                                name="tipo"
-                                required>
-                                {
-                                    <option value={1}>
-                                        Fijo
-                                        </option>
-
-                                }
-                            </select>
-                        </div>
+                        
                         {/* Note Title */}
                         <div className="form-group">
-                            <textarea
+                            <input
                                 type="text"
                                 className="form-control"
-                                placeholder="Descripción"
-                                name="Description"
+                                placeholder="Contraseña Actual"
+                                name="clave"
                                 onChange={this.onInputChange}
-                                value={this.state.Description}
+                                value={this.state.clave}
                                 required>
-                            </textarea>
+                             </input>
                         </div>
                         <div className="form-group">
                             <input
                                 type="text"
                                 className="form-control"
-                                placeholder="Valor"
+                                placeholder="Nueva Contraseña"
                                 onChange={this.onInputChange}
-                                name="valor"
-                                value={this.state.valor}
+                                name="claveNueva"
+                                value={this.state.claveNueva}
                                 required />
                         </div>
                         {/* Note Content */}
 
                         {/* Note Date */}
                         <div className="form-group">
-                            <DatePicker className="form-control" selected={this.state.date} onChange={this.onChangeDate} />
-                        </div>
+                        <input
+                                type="text"
+                                className="form-control"
+                                placeholder="Confirmar Contraseña"
+                                onChange={this.onInputChange}
+                                name="claveNueva2"
+                                value={this.state.claveNueva}
+                                required />
+                            
+                            </div>
                         <button className="btn btn-primary">
-                            Save <i className="material-icons">
+                            Guardar <i className="material-icons">
                                 assignment
 </i>
                         </button>

@@ -6,6 +6,7 @@ import Navigation from './components/Navigation'
 import NotesList from './components/Ingresos'
 import CreateNote from './components/CreateIngresos'
 import CreateUser from './components/CreateUser'
+import CambiarClave from './components/CambioClave'
 
 import './App.css';
 
@@ -18,6 +19,7 @@ function App() {
         <Route path="/edit/:id" component={CreateNote} />
         <Route path="/create" component={CreateNote} />
         <Route path="/user" component={CreateUser} />
+        <Route path="/claveCambio" component={CambiarClave} />
       </div>
     </Router>
   );
