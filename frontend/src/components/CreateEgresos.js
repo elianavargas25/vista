@@ -18,13 +18,13 @@ export default class CreateNote extends Component {
     async componentDidMount() {
         if (this.props.match.params.id) {
             console.log(this.props.match.params.id)
-            const res = await axios.get('https://finanzas-app.mileidyramos23171.now.sh/api/ingresos/' + this.props.match.params.id);
+            const res = await axios.get('https://finanzas-app.mileidyramos23171.now.sh/api/egresos/' + this.props.match.params.id);
             console.log(res.data)
             this.setState({
                 Description: res.data.Description,
                 valor: res.data.valor,
                 date: new Date(res.data.date),
-                categoria: res.data.tipo,
+                categoria: res.data.categoria,
                 tipo: res.data.tipo,
                 _id: res.data._id,
                 editing: true
@@ -38,11 +38,11 @@ export default class CreateNote extends Component {
             const updatedNote = {
                 Description: this.state.Description,
                 valor: this.state.valor,
-                categoria: this.state.tipo,
+                categoria: this.state.categoria,
                 tipo: this.state.tipo,
                 date: this.state.date
             };
-            await axios.put('https://finanzas-app.mileidyramos23171.now.sh/api/ingresos/' + this.state._id, updatedNote);
+            await axios.put('https://finanzas-app.mileidyramos23171.now.sh/api/egresos/' + this.state._id, updatedNote);
         } else {
             // const newNote = {
             //     Description: this.state.Description,
@@ -50,17 +50,16 @@ export default class CreateNote extends Component {
             //     tipo: this.state.tipo,
             //     date: this.state.date
             // };
-            await axios.post('https://finanzas-app.mileidyramos23171.now.sh/api/ingresos/', {
+            await axios.post('https://finanzas-app.mileidyramos23171.now.sh/api/egresos/', {
                 Description: this.state.Description,
                 valor: this.state.valor,
-                categoria: this.state.tipo,
+                categoria: this.state.categoria,
                 tipo: this.state.tipo,
                 date: this.state.date
             })
 
-                .then(profile => alert('Ingreso create <3'))
+                .then(profile => alert('Egreso create <3'))
                 .catch(err => alert(err))
-            //console.log(newNote)
         }
         window.location.href = '/';
 
