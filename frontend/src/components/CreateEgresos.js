@@ -9,6 +9,7 @@ export default class CreateNote extends Component {
         Description: '',
         valor: '',
         date: new Date(),
+        categoria: '',
         tipo: '',
         editing: false,
         _id: ''
@@ -23,6 +24,7 @@ export default class CreateNote extends Component {
                 Description: res.data.Description,
                 valor: res.data.valor,
                 date: new Date(res.data.date),
+                categoria: res.data.tipo,
                 tipo: res.data.tipo,
                 _id: res.data._id,
                 editing: true
@@ -36,6 +38,7 @@ export default class CreateNote extends Component {
             const updatedNote = {
                 Description: this.state.Description,
                 valor: this.state.valor,
+                categoria: this.state.tipo,
                 tipo: this.state.tipo,
                 date: this.state.date
             };
@@ -50,6 +53,7 @@ export default class CreateNote extends Component {
             await axios.post('https://finanzas-app.mileidyramos23171.now.sh/api/ingresos/', {
                 Description: this.state.Description,
                 valor: this.state.valor,
+                categoria: this.state.tipo,
                 tipo: this.state.tipo,
                 date: this.state.date
             })
@@ -77,7 +81,7 @@ export default class CreateNote extends Component {
         return (
             <div className="col-md-6 offset-md-3">
                 <div className="card card-body">
-                    <h4>Nuevo Ingreso</h4>
+                    <h4>Nuevo Egreso</h4>
                     <form onSubmit={this.onSubmit}>
                         {/* SELECT THE USER */}
                         <div className="form-group">
@@ -91,6 +95,23 @@ export default class CreateNote extends Component {
                                     <option value={1}>
                                         Fijo
                                         </option>
+                                       
+
+                                }
+                            </select>
+                        </div>
+                        <div className="form-group">
+                            <select
+                                className="form-control"
+                                value={this.state.categoria}
+                                onChange={this.onInputChange}
+                                name="categoria"
+                                required>
+                                {
+                                    <option value={1}>
+                                        gastos
+                                        </option>
+                                       
 
                                 }
                             </select>
