@@ -16,7 +16,7 @@ export default class Navigation extends Component {
                     <div className="collapse navbar-collapse" id="navbarNav">
                         <ul className="navbar-nav ml-auto">
                             <li className="nav-item active">
-                                <Link to="/" className="nav-link">Notes</Link>
+                                <Link to="/ingresos" className="nav-link">Notes</Link>
                             </li>
                             <li className="nav-item">
                                 <Link to="/create" className="nav-link">Crear Ingreso</Link>

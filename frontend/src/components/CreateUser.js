@@ -124,7 +124,7 @@ export default class CreateUser extends Component {
                                 <input
                                     onChange={this.onChangePassword}
                                     className="form-control"
-                                    type="current-password"
+                                    type="password"
                                     value={this.state.password}
                                 />
                             </div>

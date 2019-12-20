@@ -41,12 +41,6 @@ export default class CreateNote extends Component {
             };
             await axios.put('https://finanzas-app.mileidyramos23171.now.sh/api/ingresos/' + this.state._id, updatedNote);
         } else {
-            // const newNote = {
-            //     Description: this.state.Description,
-            //     valor: this.state.valor,
-            //     tipo: this.state.tipo,
-            //     date: this.state.date
-            // };
             await axios.post('https://finanzas-app.mileidyramos23171.now.sh/api/ingresos/', {
                 Description: this.state.Description,
                 valor: this.state.valor,
@@ -58,7 +52,7 @@ export default class CreateNote extends Component {
                 .catch(err => alert(err))
             //console.log(newNote)
         }
-        window.location.href = '/';
+        window.location.pathname = '/ingresos';
 
     }
 
@@ -88,10 +82,9 @@ export default class CreateNote extends Component {
                                 name="tipo"
                                 required>
                                 {
-                                    <option value={1}>
+                                    <option value="Fijo">
                                         Fijo
                                         </option>
-
                                 }
                             </select>
                         </div>

@@ -28,7 +28,7 @@ class ProfileLogin extends React.Component {
         console.log(data);
         axios.get('https://finanzas-app.mileidyramos23171.now.sh/api/sesion/'+data)
             .then(profiles => {
-                window.location.href = 'https://finanzas-app.mileidyramos23171.now.sh/api/ingresos';
+                window.location.pathname = '/ingresos';
             alert('log in successfully');
         })
             .catch(err => alert('Incorrect username or password'))
