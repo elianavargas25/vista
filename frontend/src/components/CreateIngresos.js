@@ -8,23 +8,31 @@ export default class CreateNote extends Component {
     state = {
         Description: '',
         valor: '',
-        date: new Date(),
-        tipo: '',
+        date: '',
+        tipo: [],
+        tipoSelected: '',
         editing: false,
         _id: ''
     }
 
     async componentDidMount() {
+        const res = await axios.get('https://finanzas-app.mileidyramos23171.now.sh/api/categorias');
+        if (res.data.length > 0) {
+            this.setState({
+                tipo: res.data.map(user => user.username),
+                tipoSelected: res.data[0].username
+            })
+        }
         if (this.props.match.params.id) {
             console.log(this.props.match.params.id)
             const res = await axios.get('https://finanzas-app.mileidyramos23171.now.sh/api/ingresos/' + this.props.match.params.id);
             console.log(res.data)
             this.setState({
-                Description: res.data.Description,
-                valor: res.data.valor,
-                date: new Date(res.data.date),
-                tipo: res.data.tipo,
-                _id: res.data._id,
+                Description: res.data.data.Description,
+                valor: res.data.data.valor,
+                date: res.data.data.date,
+                tipo: res.data.data.tipo,
+                _id: res.data.data._id,
                 editing: true
             });
         }
@@ -41,12 +49,6 @@ export default class CreateNote extends Component {
             };
             await axios.put('https://finanzas-app.mileidyramos23171.now.sh/api/ingresos/' + this.state._id, updatedNote);
         } else {
-            // const newNote = {
-            //     Description: this.state.Description,
-            //     valor: this.state.valor,
-            //     tipo: this.state.tipo,
-            //     date: this.state.date
-            // };
             await axios.post('https://finanzas-app.mileidyramos23171.now.sh/api/ingresos/', {
                 Description: this.state.Description,
                 valor: this.state.valor,
@@ -108,7 +110,7 @@ export default class CreateNote extends Component {
                             </textarea>
                         </div>
                         <div className="form-group">
-                            <input
+                            <input  
                                 type="text"
                                 className="form-control"
                                 placeholder="Valor"

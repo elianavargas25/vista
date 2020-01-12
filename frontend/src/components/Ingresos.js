@@ -44,10 +44,10 @@ export default class NotesList extends Component {
                                         {note.valor}
                                     </p>
                                     <p>
-                                        Author: {note.tipo}
+                                        Tipo: {note.tipo}
                                     </p>
                                     <p>
-                                        {format(note.createdAt)}
+                                        Fecha: {note.date}
                                     </p>
                                 </div>
                                 <div className="card-footer">
