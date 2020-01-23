@@ -9,7 +9,7 @@ export default class CreateNote extends Component {
         Description: '',
         valor: '',
         date: '',
-        tipo: [],
+        tipos: [],
         tipoSelected: '',
         editing: false,
         _id: ''
@@ -19,9 +19,10 @@ export default class CreateNote extends Component {
         const res = await axios.get('https://finanzas-app.mileidyramos23171.now.sh/api/categorias');
         if (res.data.length > 0) {
             this.setState({
-                tipo: res.data.map(user => user.username),
-                tipoSelected: res.data[0].username
+                tipos: res.data.map(tipo => tipo.tipo),
+                tipoSelected: res.data.tipo
             })
+            console.log(res)
         }
         if (this.props.match.params.id) {
             console.log(this.props.match.params.id)
@@ -31,7 +32,7 @@ export default class CreateNote extends Component {
                 Description: res.data.data.Description,
                 valor: res.data.data.valor,
                 date: res.data.data.date,
-                tipo: res.data.data.tipo,
+                tipoSelected: res.data.data.tipo,
                 _id: res.data.data._id,
                 editing: true
             });
@@ -44,7 +45,7 @@ export default class CreateNote extends Component {
             const updatedNote = {
                 Description: this.state.Description,
                 valor: this.state.valor,
-                tipo: this.state.tipo,
+                tipo: this.state.tipoSelected,
                 date: this.state.date
             };
             await axios.put('https://finanzas-app.mileidyramos23171.now.sh/api/ingresos/' + this.state._id, updatedNote);
@@ -52,7 +53,7 @@ export default class CreateNote extends Component {
             await axios.post('https://finanzas-app.mileidyramos23171.now.sh/api/ingresos/', {
                 Description: this.state.Description,
                 valor: this.state.valor,
-                tipo: this.state.tipo,
+                tipo: this.state.tipoSelected,
                 date: this.state.date
             })
 
@@ -82,18 +83,22 @@ export default class CreateNote extends Component {
                     <h4>Nuevo Ingreso</h4>
                     <form onSubmit={this.onSubmit}>
                         {/* SELECT THE USER */}
+                        <div>
+                        <label>Categoria</label>
+                        </div>
                         <div className="form-group">
                             <select
                                 className="form-control"
-                                value={this.state.tipo}
+                                value={this.state.tipoSelected}
                                 onChange={this.onInputChange}
-                                name="tipo"
+                                name="tipoSelected"
                                 required>
                                 {
-                                    <option value={1}>
-                                        Fijo
+                                     this.state.tipos.map(tipo => (
+                                        <option key={tipo._id} value={tipo._id}>
+                                            {tipo.tipo}
                                         </option>
-
+                                    ))
                                 }
                             </select>
                         </div>
