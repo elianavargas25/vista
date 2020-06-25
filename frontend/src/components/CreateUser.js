@@ -139,8 +139,7 @@ export default class CreateUser extends Component {
                         {
                             this.state.users.map(user => (
                                 <li className="list-group-item list-group-item-action" key={user._id} 
-                                onDoubleClick={() => this.deleteUser(user._id)}
-                                >
+                                onDoubleClick={() => this.deleteUser(user._id)}>
                                     {user.UserName}
                                 </li>
                             ))

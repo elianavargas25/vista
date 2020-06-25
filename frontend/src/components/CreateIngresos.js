@@ -19,11 +19,11 @@ export default class CreateNote extends Component {
         const res = await axios.get('https://finanzas-app.mileidyramos23171.now.sh/api/categorias');
         if (res.data.length > 0) {
             this.setState({
-                tipos: res.data.map(tipo => tipo.tipo),
-                tipoSelected: res.data.tipo
-            })
-            console.log(res)
+                tipos: res.data.data
+               // tipoSelected: res.data.data[0].tipo
+            })                  
         }
+       //console.log(tipos) 
         if (this.props.match.params.id) {
             console.log(this.props.match.params.id)
             const res = await axios.get('https://finanzas-app.mileidyramos23171.now.sh/api/ingresos/' + this.props.match.params.id);
@@ -42,13 +42,13 @@ export default class CreateNote extends Component {
     onSubmit = async (e) => {
         e.preventDefault();
         if (this.state.editing) {
-            const updatedNote = {
+            const updatedIngreso = {
                 Description: this.state.Description,
                 valor: this.state.valor,
                 tipo: this.state.tipoSelected,
                 date: this.state.date
             };
-            await axios.put('https://finanzas-app.mileidyramos23171.now.sh/api/ingresos/' + this.state._id, updatedNote);
+            await axios.put('https://finanzas-app.mileidyramos23171.now.sh/api/ingresos/' + this.state._id, updatedIngreso);
         } else {
             await axios.post('https://finanzas-app.mileidyramos23171.now.sh/api/ingresos/', {
                 Description: this.state.Description,
@@ -57,10 +57,9 @@ export default class CreateNote extends Component {
                 date: this.state.date
             })
 
-                .then(profile => alert('Ingreso create <3'))
+                .then(profile => alert('Ingreso creado'))
                 .catch(err => alert(err))
-            //console.log(newNote)
-        }
+                  }
         window.location.href = '/';
 
     }
@@ -132,8 +131,7 @@ export default class CreateNote extends Component {
                         </div>
                         <button className="btn btn-primary">
                             Save <i className="material-icons">
-                                assignment
-</i>
+                                assignment</i>
                         </button>
                     </form>
                 </div>
