@@ -8,7 +8,7 @@ import CreateNote from './components/CreateIngresos'
 import CreateUser from './components/CreateUser'
 import CambiarClave from './components/CambioClave'
 import CreateEgresos from './components/CreateEgresos'
-
+import inicio from './components/Login'
 import './App.css';
 
 function App() {
@@ -16,7 +16,8 @@ function App() {
     <Router>
       <Navigation />
       <div className="container p-4">
-        <Route path="/" exact component={NotesList} />
+        <Route path="/" exact component={inicio} />
+        <Route path="/ingresos" exact component={NotesList} />
         <Route path="/edit/:id" component={CreateNote} />
         <Route path="/create" component={CreateNote} />
         <Route path="/Egresos" component={CreateEgresos} />
