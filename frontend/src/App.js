@@ -3,7 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 
 import Navigation from './components/Navigation'
-import NotesList from './components/Ingresos'
+import ListIngresos from './components/Ingresos'
 import CreateNote from './components/CreateIngresos'
 import CreateUser from './components/CreateUser'
 import CambiarClave from './components/CambioClave'
@@ -17,7 +17,7 @@ function App() {
       <Navigation />
       <div className="container p-4">
         <Route path="/" exact component={inicio} />
-        <Route path="/ingresos" exact component={NotesList} />
+        <Route path="/ingresos" exact component={ListIngresos} />
         <Route path="/edit/:id" component={CreateNote} />
         <Route path="/create" component={CreateNote} />
         <Route path="/Egresos" component={CreateEgresos} />
