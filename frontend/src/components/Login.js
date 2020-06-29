@@ -28,7 +28,7 @@ class ProfileLogin extends React.Component {
         console.log(data);
         axios.get('https://finanzas-app.mileidyramos23171.now.sh/api/sesion/'+data)
             .then(profiles => {
-                window.location.href = 'https://finanzas-app.mileidyramos23171.now.sh/api/ingresos';
+                window.location.href = '/Ingresos';
             alert('log in successfully');
         })
             .catch(err => alert('Incorrect username or password'))
@@ -42,7 +42,7 @@ class ProfileLogin extends React.Component {
                         <div className="col-md-4 col-md-offset-4">
                             <div className="panel panel-default">
                                 <div className="panel-heading">
-                                    <h3 className="panel-title">Login</h3>
+                                    <h1 className="panel-title">Login</h1>
                                 </div>
                                 <div className="panel-body">
                                     <form accept-charset="UTF-8" role="form">

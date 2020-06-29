@@ -3,7 +3,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css'
 import axios from 'axios'
 
-export default class CreateNote extends Component {
+export default class CreateIngreso extends Component {
 
     state = {
         Description: '',
@@ -16,14 +16,8 @@ export default class CreateNote extends Component {
     }
 
     async componentDidMount() {
-        const res = await axios.get('https://finanzas-app.mileidyramos23171.now.sh/api/categorias');
-        if (res.data.length > 0) {
-            this.setState({
-                tipos: res.data.data
-               // tipoSelected: res.data.data[0].tipo
-            })                  
-        }
-       //console.log(tipos) 
+        this.getTipo();
+
         if (this.props.match.params.id) {
             console.log(this.props.match.params.id)
             const res = await axios.get('https://finanzas-app.mileidyramos23171.now.sh/api/ingresos/' + this.props.match.params.id);
@@ -31,12 +25,20 @@ export default class CreateNote extends Component {
             this.setState({
                 Description: res.data.data.Description,
                 valor: res.data.data.valor,
-                date: res.data.data.date,
+                date: new Date(res.data.data.date),
                 tipoSelected: res.data.data.tipo,
                 _id: res.data.data._id,
                 editing: true
             });
         }
+    }
+
+    getTipo = async () => {
+        const res = await axios.get('https://finanzas-app.mileidyramos23171.now.sh/api/categorias/')
+        this.setState({
+            tipos: res.data.data,
+            tipoSelected: res.data.data[0].tipo
+        });
     }
 
     onSubmit = async (e) => {
@@ -54,13 +56,13 @@ export default class CreateNote extends Component {
                 Description: this.state.Description,
                 valor: this.state.valor,
                 tipo: this.state.tipoSelected,
-                date: this.state.date
+                date: new Date()
             })
 
                 .then(profile => alert('Ingreso creado'))
                 .catch(err => alert(err))
-                  }
-        window.location.href = '/';
+        }
+        window.location.href = '/ingresos/';
 
     }
 
@@ -79,11 +81,11 @@ export default class CreateNote extends Component {
         return (
             <div className="col-md-6 offset-md-3">
                 <div className="card card-body">
-                    <h4>Nuevo Ingreso</h4>
+                   <center> <h5>Nuevo Ingreso</h5> </center>
                     <form onSubmit={this.onSubmit}>
                         {/* SELECT THE USER */}
                         <div>
-                        <label>Categoria</label>
+                            <label>Tipo Ingreso</label>
                         </div>
                         <div className="form-group">
                             <select
@@ -93,8 +95,8 @@ export default class CreateNote extends Component {
                                 name="tipoSelected"
                                 required>
                                 {
-                                     this.state.tipos.map(tipo => (
-                                        <option key={tipo._id} value={tipo._id}>
+                                    this.state.tipos.map(tipo => (
+                                        <option key={tipo._id} value={tipo.tipo}>
                                             {tipo.tipo}
                                         </option>
                                     ))
@@ -102,6 +104,9 @@ export default class CreateNote extends Component {
                             </select>
                         </div>
                         {/* Note Title */}
+                        <div>
+                            <label>Descripción</label>
+                        </div>
                         <div className="form-group">
                             <textarea
                                 type="text"
@@ -113,8 +118,11 @@ export default class CreateNote extends Component {
                                 required>
                             </textarea>
                         </div>
+                        <div>
+                            <label>Valor</label>
+                        </div>
                         <div className="form-group">
-                            <input  
+                            <input
                                 type="text"
                                 className="form-control"
                                 placeholder="Valor"
@@ -123,14 +131,14 @@ export default class CreateNote extends Component {
                                 value={this.state.valor}
                                 required />
                         </div>
-                        {/* Note Content */}
-
-                        {/* Note Date */}
+                        <div>
+                            <label>Fecha</label>
+                        </div>
                         <div className="form-group">
                             <DatePicker className="form-control" selected={this.state.date} onChange={this.onChangeDate} />
                         </div>
                         <button className="btn btn-primary">
-                            Save <i className="material-icons">
+                            Guardar <i className="material-icons">
                                 assignment</i>
                         </button>
                     </form>
