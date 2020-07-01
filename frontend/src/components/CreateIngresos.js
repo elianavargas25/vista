@@ -18,7 +18,7 @@ export default class CreateNote extends Component {
         if (this.props.match.params.id) {
             console.log(this.props.match.params.id)
             const res = await axios.get('https://finanzas-app.mileidyramos23171.now.sh/api/ingresos/' + this.props.match.params.id);
-            console.log(res.data)
+            console.log("Este "+res.data)
             this.setState({
                 Description: res.data.Description,
                 valor: res.data.valor,

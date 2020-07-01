@@ -16,7 +16,6 @@ function App() {
     <Router>
       <Navigation />
       <div className="container p-4">
-        <Route path="/" exact component={inicio} />
         <Route path="/ingresos" exact component={NotesList} />
         <Route path="/edit/:id" component={CreateNote} />
         <Route path="/create" component={CreateNote} />

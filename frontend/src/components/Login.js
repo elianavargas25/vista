@@ -1,3 +1,6 @@
+import '../App.css';
+import ReactDOM from 'react-dom';
+import App from '../App';
 import React from 'react';
 import axios from 'axios';
 
@@ -5,14 +8,15 @@ class ProfileLogin extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
+            data:[],
             form: {
                 UserName:'',
                 password:''
-
             }
         }
     }
-    state = {};
+    
+    state = {}; 
 
     handleNameChange = e => {
         this.setState({username: e.target.value});
@@ -26,9 +30,9 @@ class ProfileLogin extends React.Component {
         e.preventDefault();
         var data = "?username="+this.state.username+"&password="+this.state.password;
         console.log(data);
-        axios.get('https://finanzas-app.mileidyramos23171.now.sh/api/sesion/'+data)
+        axios.get('http://localhost:3000/api/sesion/'+data)
             .then(profiles => {
-                window.location.href = 'https://finanzas-app.mileidyramos23171.now.sh/api/ingresos';
+                ReactDOM.render(<App />, document.getElementById('root'));
             alert('log in successfully');
         })
             .catch(err => alert('Incorrect username or password'))
