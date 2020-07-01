@@ -3,55 +3,59 @@ import axios from 'axios'
 import { format } from 'timeago.js'
 import { Link } from 'react-router-dom'
 
-export default class NotesList extends Component {
+export default class EgresosList extends Component {
 
     state = {
-        notes: []
+        egresos: []
     }
 
     async componentDidMount() {
-        this.getNotes();
+        this.getEgresos();
     }
 
-    getNotes = async () => {
-        const res = await axios.get('https://finanzas-app.mileidyramos23171.now.sh/api/ingresos/')
+    getEgresos = async () => {
+        const res = await axios.get('https://finanzas-app.mileidyramos23171.now.sh/api/egresos/')
         this.setState({
-            notes: res.data.data
+            egresos: res.data.data
         });
     }
 
-    deleteNote = async (noteId) => {
-        await axios.delete('https://finanzas-app.mileidyramos23171.now.sh/api/ingresos/' + noteId);
-        this.getNotes();
+    deleteEgreso = async (egresoId) => {
+        await axios.delete('https://finanzas-app.mileidyramos23171.now.sh/api/egresos/' + egresoId);
+        this.getEgresos();
     }
 
     render() {
         return (
             <div className="row">
                 {
-                    this.state.notes.map(note => (
-                        <div className="col-md-4 p-2" key={note._id}>
+                    this.state.egresos.map(egreso => (
+                        <div className="col-md-4 p-2" key={egreso._id}>
                             <div className="card">
                                 <div className="card-header d-flex justify-content-between">
-                                    <h5>{note.Description}</h5>
-                                    <Link to={"/edit/" + note._id} className="btn btn-secondary">
+                                    <h5>{egreso.categoria}</h5>
+                                    <Link to={"/edit/" + egreso._id} className="btn btn-secondary">
                                         <i className="material-icons">
                                             border_color</i>
                                     </Link>
                                 </div>
                                 <div className="card-body">
+
                                     <p>
-                                        Valor:  {note.valor}
+                                        Tipo: {egreso.tipo}
                                     </p>
                                     <p>
-                                        Tipo Ingreso: {note.tipo}
+                                        Valor: {egreso.valor}
                                     </p>
                                     <p>
-                                        Fecha:  {(note.date)}
+                                        Descripción: {egreso.Description}
+                                    </p>
+                                    <p>
+                                        Fecha:  {(egreso.date)}
                                     </p>
                                 </div>
                                 <div className="card-footer">
-                                    <button className="btn btn-danger" onClick={() => this.deleteNote(note._id)}>
+                                    <button className="btn btn-danger" onClick={() => this.deleteNote(egreso._id)}>
                                         Eliminar
                                     </button>
                                 </div>
