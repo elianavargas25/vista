@@ -8,33 +8,38 @@ class ProfileLogin extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            data:[],
+            data: [],
             form: {
-                UserName:'',
-                password:''
-            }
+                UserName: '',
+                password: ''
+            },
+            user: []
         }
     }
-    
-    state = {}; 
+
+    state = {};
 
     handleNameChange = e => {
-        this.setState({username: e.target.value});
+        this.setState({ username: e.target.value });
     }
 
     handlePasswordChange = e => {
-        this.setState({password: e.target.value});
+        this.setState({ password: e.target.value });
     }
 
-    handleSubmit = e => {
+     handleSubmit = async(e) => {
         e.preventDefault();
-        var data = "?username="+this.state.username+"&password="+this.state.password;
+        var data = "?username=" + this.state.username + "&password=" + this.state.password;
         console.log(data);
-        axios.get('http://localhost:3000/api/sesion/'+data)
+        const res = await axios.get('https://finanzas-app.mileidyramos23171.now.sh/api/sesion/' + data)
             .then(profiles => {
+                this.setState({
+                    user: res.data.data
+                });
+                console.log(this.state.user);
                 ReactDOM.render(<App />, document.getElementById('root'));
-            alert('log in successfully');
-        })
+                alert('log in successfully');
+            })
             .catch(err => alert('Incorrect username or password'))
     };
 
@@ -59,7 +64,7 @@ class ProfileLogin extends React.Component {
                                                     id="user"
                                                     type="text"
                                                     required
-                                                    onChange={this.handleNameChange} 
+                                                    onChange={this.handleNameChange}
                                                 />
                                             </div>
                                             <div className="form-group">
@@ -76,7 +81,7 @@ class ProfileLogin extends React.Component {
                                             <div className="form-group">
                                                 <a href="#" placeholder="Cambiar contraseña">Cambiar contraseña</a>
                                             </div>
-                                            
+
                                             <button onClick={this.handleSubmit}
                                                 className="btn btn-lg btn-success btn-block"
                                                 type="submit"

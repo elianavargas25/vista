@@ -21,7 +21,7 @@ export default class CreateIngreso extends Component {
         if (this.props.match.params.id) {
             console.log(this.props.match.params.id)
             const res = await axios.get('https://finanzas-app.mileidyramos23171.now.sh/api/ingresos/' + this.props.match.params.id);
-            console.log("Este "+res.data)
+            console.log(res.data)
             this.setState({
                 Description: res.data.data.Description,
                 valor: res.data.data.valor,
