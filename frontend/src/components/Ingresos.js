@@ -34,7 +34,7 @@ export default class NotesList extends Component {
                             <div className="card">
                                 <div className="card-header d-flex justify-content-between">
                                     <h5>{note.Description}</h5>
-                                    <Link to={"/edit/" + note._id} className="btn btn-secondary">
+                                    <Link to={"/editIngreso/" + note._id} className="btn btn-secondary">
                                         <i className="material-icons">
                                             border_color</i>
                                     </Link>

@@ -1,7 +1,9 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css'
 import axios from 'axios'
+import ReactDOM from 'react-dom';
+import App from '../App';
 
 export default class CreateIngreso extends Component {
 
@@ -12,7 +14,8 @@ export default class CreateIngreso extends Component {
         tipos: [],
         tipoSelected: '',
         editing: false,
-        _id: ''
+        _id: '',
+        _idUser: ''
     }
 
     async componentDidMount() {
@@ -20,35 +23,44 @@ export default class CreateIngreso extends Component {
 
         if (this.props.match.params.id) {
             console.log(this.props.match.params.id)
-            const res = await axios.get('https://finanzas-app.mileidyramos23171.now.sh/api/ingresos/' + this.props.match.params.id);
-            console.log(res.data)
-            this.setState({
-                Description: res.data.data.Description,
-                valor: res.data.data.valor,
-                date: new Date(res.data.data.date),
-                tipoSelected: res.data.data.tipo,
-                _id: res.data.data._id,
-                editing: true
-            });
+            this.getIngreso();
         }
     }
 
     getTipo = async () => {
-        const res = await axios.get('https://finanzas-app.mileidyramos23171.now.sh/api/categorias/')
+        const res = await axios.get('https://finanzas-app.mileidyramos23171.now.sh/api/tipos/')
         this.setState({
             tipos: res.data.data,
             tipoSelected: res.data.data[0].tipo
         });
     }
 
+    getIngreso = async () => {
+        const res = await axios.get('https://finanzas-app.mileidyramos23171.now.sh/api/ingresos/' + this.props.match.params.id);
+        console.log(res.data.data);
+        this.setState({
+            Description: res.data.data.Description,
+            valor: res.data.data.valor,
+            date: new Date(res.data.data.date),
+            tipoSelected: res.data.data.tipo,
+            _id: res.data.data._id,
+            _idUser: res.data.data._idUser,
+            editing: true
+        });
+    }
+
     onSubmit = async (e) => {
+        const dataLocal = JSON.parse(window.localStorage.getItem('user'));
+        const idUser = dataLocal.data.data._id
+
         e.preventDefault();
         if (this.state.editing) {
             const updatedIngreso = {
                 Description: this.state.Description,
                 valor: this.state.valor,
                 tipo: this.state.tipoSelected,
-                date: this.state.date
+                date: this.state.date,
+                _idUser: idUser
             };
             await axios.put('https://finanzas-app.mileidyramos23171.now.sh/api/ingresos/' + this.state._id, updatedIngreso);
         } else {
@@ -56,10 +68,14 @@ export default class CreateIngreso extends Component {
                 Description: this.state.Description,
                 valor: this.state.valor,
                 tipo: this.state.tipoSelected,
-                date: new Date()
+                date: new Date(),
+                _idUser: idUser
             })
 
-                .then(profile => alert('Ingreso creado'))
+                .then(profile => {
+                    ReactDOM.render(<App />, document.getElementById('root'));
+                    alert('Ingreso creado')
+                })
                 .catch(err => alert(err))
         }
         window.location.href = '/ingresos/';
@@ -81,7 +97,7 @@ export default class CreateIngreso extends Component {
         return (
             <div className="col-md-6 offset-md-3">
                 <div className="card card-body">
-                   <center> <h5>Nuevo Ingreso</h5> </center>
+                    <center> <h5>Nuevo Ingreso</h5> </center>
                     <form onSubmit={this.onSubmit}>
                         {/* SELECT THE USER */}
                         <div>

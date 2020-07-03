@@ -2,37 +2,68 @@ import React, { Component } from 'react'
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css'
 import axios from 'axios'
+import ReactDOM from 'react-dom';
+import App from '../App';
 
 export default class CreateEgresos extends Component {
 
     state = {
         Description: '',
         valor: '',
-        date: new Date(),
-        categoria: '',
-        tipo: '',
+        date: '',
+        categorias: [],
+        tipos: [],
+        categoriaSelected: '',
+        tipoSelected: '',
         editing: false,
-        _id: ''
+        _id: '',
+        _idUser: ''
     }
 
     async componentDidMount() {
+        this.getTipo();
+        this.getCategoria();
         if (this.props.match.params.id) {
             console.log(this.props.match.params.id)
-            const res = await axios.get('https://finanzas-app.mileidyramos23171.now.sh/api/egresos/' + this.props.match.params.id);
-            console.log(res.data)
-            this.setState({
-                Description: res.data.Description,
-                valor: res.data.valor,
-                date: new Date(res.data.date),
-                categoria: res.data.categoria,
-                tipo: res.data.tipo,
-                _id: res.data._id,
-                editing: true
-            });
+            this.getEgresos();
         }
     }
 
+    getTipo = async () => {
+        const res = await axios.get('https://finanzas-app.mileidyramos23171.now.sh/api/tipos/')
+        this.setState({
+            tipos: res.data.data,
+            tipoSelected: res.data.data[0].tipo
+        });
+    }
+
+    getCategoria = async () => {
+        const res = await axios.get('https://finanzas-app.mileidyramos23171.now.sh/api/categorias/')
+        this.setState({
+            categorias: res.data.data,
+            categoriaSelected: res.data.data[0].categoria
+        });
+    }
+
+    getEgresos = async () => {
+        const res = await axios.get('https://finanzas-app.mileidyramos23171.now.sh/api/egresos/' + this.props.match.params.id);
+        console.log(res.data.data);
+        this.setState({
+            Description: res.data.data.Description,
+            valor: res.data.data.valor,
+            date: new Date(res.data.data.date),
+            categoriaSelected: res.data.data.categoria,
+            tipoSelected: res.data.data.tipo,
+            _id: res.data.data._id,
+            _idUser: res.data.data._idUser,
+            editing: true
+        });
+    }
+
     onSubmit = async (e) => {
+        const dataLocal = JSON.parse(window.localStorage.getItem('user'));
+        const idUser = dataLocal.data.data._id
+
         e.preventDefault();
         if (this.state.editing) {
             const updatedNote = {
@@ -40,7 +71,8 @@ export default class CreateEgresos extends Component {
                 valor: this.state.valor,
                 categoria: this.state.categoria,
                 tipo: this.state.tipo,
-                date: this.state.date
+                date: this.state.date,
+                _idUser: idUser
             };
             await axios.put('https://finanzas-app.mileidyramos23171.now.sh/api/egresos/' + this.state._id, updatedNote);
         } else {
@@ -49,10 +81,14 @@ export default class CreateEgresos extends Component {
                 valor: this.state.valor,
                 categoria: this.state.categoria,
                 tipo: this.state.tipo,
-                date: new Date()
+                date: new Date(),
+                _idUser: idUser
             })
 
-                .then(profile => alert('Egreso create '))
+                .then(profile => {
+                    ReactDOM.render(<App />, document.getElementById('root'));
+                    alert('Egreso creado')
+                })
                 .catch(err => alert(err))
         }
         window.location.href = '/egresos';
@@ -83,16 +119,16 @@ export default class CreateEgresos extends Component {
                         <div className="form-group">
                             <select
                                 className="form-control"
-                                value={this.state.tipo}
+                                value={this.state.tipoSelected}
                                 onChange={this.onInputChange}
                                 name="tipo"
                                 required>
                                 {
-                                    <option value={1}>
-                                        Fijo
+                                    this.state.tipos.map(tipo => (
+                                        <option key={tipo._id} value={tipo.tipo}>
+                                            {tipo.tipo}
                                         </option>
-
-
+                                    ))
                                 }
                             </select>
                         </div>
@@ -107,11 +143,11 @@ export default class CreateEgresos extends Component {
                                 name="categoria"
                                 required>
                                 {
-                                    <option value={1}>
-                                        gastos
+                                    this.state.categorias.map(categoria => (
+                                        <option key={categoria._id} value={categoria.categoria}>
+                                            {categoria.categoria}
                                         </option>
-
-
+                                    ))
                                 }
                             </select>
                         </div>

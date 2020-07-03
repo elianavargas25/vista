@@ -34,7 +34,7 @@ export default class EgresosList extends Component {
                             <div className="card">
                                 <div className="card-header d-flex justify-content-between">
                                     <h5>{egreso.categoria}</h5>
-                                    <Link to={"/edit/" + egreso._id} className="btn btn-secondary">
+                                    <Link to={"/editEgreso/" + egreso._id} className="btn btn-secondary">
                                         <i className="material-icons">
                                             border_color</i>
                                     </Link>
@@ -55,7 +55,7 @@ export default class EgresosList extends Component {
                                     </p>
                                 </div>
                                 <div className="card-footer">
-                                    <button className="btn btn-danger" onClick={() => this.deleteNote(egreso._id)}>
+                                    <button className="btn btn-danger" onClick={() => this.deleteEgreso(egreso._id)}>
                                         Eliminar
                                     </button>
                                 </div>

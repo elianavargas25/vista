@@ -20,20 +20,24 @@ import './App.css';
 
 function App() {
   return (
+    
     <Router>
       <Navigation />
       <div className="container p-4">
         <Route path="/ingresos" exact component={ListIngresos} />
         <Route path="/egresos" exact component={ListEgresos} />
-        <Route path="/edit/:id" component={CreateIngresos} />
+        <Route path="/editIngreso/:id" component={CreateIngresos} />
         <Route path="/createIngreso" component={CreateIngresos} />
         <Route path="/createEgresos" component={CreateEgresos} />
-        <Route path="/edit/:id" component={CreateEgresos} />
+        <Route path="/editEgreso/:id" component={CreateEgresos} />
         <Route path="/user" component={CreateUser} />
         <Route path="/claveCambio" component={CambiarClave} />
         <Route path="/movimiento" component={movimiento} />
       </div>
+
+      <Route path="/" exact component={inicio} />
     </Router>
+
   );
 }
 ReactDOM.render(
