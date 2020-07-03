@@ -1,40 +1,48 @@
-import React from 'react';
+import '../App.css';
+import React, { Component } from 'react'
+import ReactDOM from 'react-dom';
+import App from '../App';
 import axios from 'axios';
+import { Link } from 'react-router-dom'
+import Cambio from "./CambioClave";
 
-class ProfileLogin extends React.Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            form: {
-                UserName:'',
-                password:''
+class ProfileLogin extends Component {
 
-            }
-        }
+    state = {
+        data: [],
+        form: {
+            UserName: '',
+            password: ''
+        },
+        id: ''
     }
-    state = {};
 
     handleNameChange = e => {
-        this.setState({username: e.target.value});
+        this.setState({ username: e.target.value });
     }
 
     handlePasswordChange = e => {
-        this.setState({password: e.target.value});
+        this.setState({ password: e.target.value });
     }
 
-    handleSubmit = e => {
+    handleSubmit = async (e, err) => {
         e.preventDefault();
-        var data = "?username="+this.state.username+"&password="+this.state.password;
+        var data = "?username=" + this.state.username + "&password=" + this.state.password;
         console.log(data);
-        axios.get('https://finanzas-app.mileidyramos23171.now.sh/api/sesion/'+data)
-            .then(profiles => {
-                window.location.pathname = '/ingresos';
-            alert('log in successfully');
-        })
-            .catch(err => alert('Incorrect username or password'))
-    };
+        const res = await axios.get('https://finanzas-app.mileidyramos23171.now.sh/api/sesion/' + data)
+        if (res) {
+            ReactDOM.render(<App />, document.getElementById('root'));
+            window.localStorage.setItem('user', JSON.stringify(res));
+            console.log(res.data.data);
+        }
+        this.setState({
+            id: res.data.data
+        });
+    }
 
     render() {
+        const CambId = this.state.id;
+        console.log("El cambio " + CambId);
         return (
             <React.Fragment>
                 <div className="container">
@@ -42,7 +50,7 @@ class ProfileLogin extends React.Component {
                         <div className="col-md-4 col-md-offset-4">
                             <div className="panel panel-default">
                                 <div className="panel-heading">
-                                    <h3 className="panel-title">Login</h3>
+                                    <h1 className="panel-title">Login</h1>
                                 </div>
                                 <div className="panel-body">
                                     <form accept-charset="UTF-8" role="form">
@@ -55,7 +63,7 @@ class ProfileLogin extends React.Component {
                                                     id="user"
                                                     type="text"
                                                     required
-                                                    onChange={this.handleNameChange} 
+                                                    onChange={this.handleNameChange}
                                                 />
                                             </div>
                                             <div className="form-group">
@@ -70,9 +78,9 @@ class ProfileLogin extends React.Component {
                                                     required />
                                             </div>
                                             <div className="form-group">
-                                                <a href="#" placeholder="Cambiar contraseña">Cambiar contraseña</a>
+                                                <a href="%">Cambio de contraseña</a>
                                             </div>
-                                            
+
                                             <button onClick={this.handleSubmit}
                                                 className="btn btn-lg btn-success btn-block"
                                                 type="submit"
@@ -84,8 +92,11 @@ class ProfileLogin extends React.Component {
                                 </div>
                             </div>
                         </div>
+
                     </div>
+
                 </div>
+
 
             </React.Fragment>
         )

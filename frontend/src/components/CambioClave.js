@@ -1,126 +1,120 @@
-import React, { Component } from 'react'
-import DatePicker from 'react-datepicker';
+import React, { useState, useEffect } from 'react';
 import 'react-datepicker/dist/react-datepicker.css'
+import login from './Login'
 import axios from 'axios'
 
-export default class CreateNote extends Component {
+const CambioClave = () => {
 
-    state = {
-        clave: '',
-        claveNueva: '',
-        claveNueva2: '',
-        editing: false,
-        _id: ''
-    }
+    const [changePassword, setChangePassword] = useState({
+        password: '',
+        password2: '',
+        newPassword: '',
+    });
 
-    async componentDidMount() {
-        if (this.props.match.params.id) {
-            console.log(this.props.match.params.id)
-            const res = await axios.get('https://finanzas-app.mileidyramos23171.now.sh/api/ingresos/' + this.props.match.params.id);
-            console.log(res.data)
-            this.setState({
-                clave: res.data.clave,
-                claveNueva: res.data.claveNueva,
-                claveNueva2: res.data.claveNueva2,
-                _id: res.data._id,
-                editing: true
-            });
+    const [dataLocalStorage, setDataLocalStorage] = useState(null);
+
+    useEffect(() => {
+        const dataLocal = JSON.parse(window.localStorage.getItem('user'));
+        setDataLocalStorage(dataLocal)
+    }, [])
+
+    const onSubmit = async (event) => {
+        event.preventDefault();
+        const passwordBack = dataLocalStorage.data.data.password;
+        const passwordActual = changePassword.password;
+        const passwordNueva = changePassword.password2;
+        const passwordNueva2 = changePassword.newPassword;
+        const id = dataLocalStorage.data.data._id;
+        let URI = "https://finanzas-app.mileidyramos23171.now.sh/api/cambio/" + id;
+
+        if (passwordBack !== passwordActual) {
+            alert('Contraseña incorrecta')
         }
-    }
 
-    onSubmit = async (e) => {
-        e.preventDefault();
-        if (this.state.editing) {
-            const updatedNote = {
-                clave: this.state.clave,
-                claveNueva: this.state.claveNueva,
-                claveNueva2: this.state.claveNueva2
-            };
-            await axios.put('https://finanzas-app.mileidyramos23171.now.sh/api/ingresos/' + this.state._id, updatedNote);
-        } else {
-            // const newNote = {
-            //     clave: this.state.clave,
-            //     claveNueva: this.state.claveNueva,
-            //     claveNueva2: this.state.claveNueva2,
-            //     date: this.state.date
-            // };
-            await axios.post('https://finanzas-app.mileidyramos23171.now.sh/api/ingresos/', {
-                clave: this.state.clave,
-                claveNueva: this.state.claveNueva,
-                claveNueva2: this.state.claveNueva2
-            })
-
-                .then(profile => alert('Ingreso create <3'))
-                .catch(err => alert(err))
-            //console.log(newNote)
+        if (passwordNueva !== passwordNueva2) {
+            alert('Las contraseñas no coinciden')
         }
-        window.location.href = '/';
+
+        if (passwordBack === passwordActual && passwordNueva === passwordNueva2) {
+            axios.put(URI, {
+                password:passwordNueva
+              })
+              .then(function (response) {
+                console.log(response);
+              })
+              .catch(function (error) {
+                console.log(error);
+              });
+        }else{
+            console.log('NO entro')
+        }
 
     }
 
-    onInputChange = (e) => {
-        this.setState({
-            [e.target.name]: e.target.value
-        })
-    }
+    return (
+        <div className="col-md-6 offset-md-3">
+            <div className="card card-body">
+                <h4>Cambiar Contraseña</h4>
+                <form onSubmit={onSubmit}>
+                    {/* SELECT THE USER */}
 
-    onChangeDate = date => {
-        this.setState({ date });
-    }
-
-
-    render() {
-        return (
-            <div className="col-md-6 offset-md-3">
-                <div className="card card-body">
-                    <h4>Cambiar Contraseña</h4>
-                    <form onSubmit={this.onSubmit}>
-                        {/* SELECT THE USER */}
-                        
-                        {/* Note Title */}
-                        <div className="form-group">
-                            <input
-                                type="text"
-                                className="form-control"
-                                placeholder="Contraseña Actual"
-                                name="clave"
-                                onChange={this.onInputChange}
-                                value={this.state.clave}
-                                required>
-                             </input>
-                        </div>
-                        <div className="form-group">
-                            <input
-                                type="text"
-                                className="form-control"
-                                placeholder="Nueva Contraseña"
-                                onChange={this.onInputChange}
-                                name="claveNueva"
-                                value={this.state.claveNueva}
-                                required />
-                        </div>
-                        {/* Note Content */}
-
-                        {/* Note Date */}
-                        <div className="form-group">
+                    {/* Note Title */}
+                    <div className="form-group">
                         <input
-                                type="text"
-                                className="form-control"
-                                placeholder="Confirmar Contraseña"
-                                onChange={this.onInputChange}
-                                name="claveNueva2"
-                                value={this.state.claveNueva}
-                                required />
-                            
-                            </div>
-                        <button className="btn btn-primary">
-                            Guardar <i className="material-icons">
-                                assignment
-</i>
-                        </button>
-                    </form>
-                </div>
+                            type="text"
+                            className="form-control"
+                            placeholder="Contraseña Actual"
+
+                            onChange={(event) => {
+                                setChangePassword({
+                                    ...changePassword,
+                                    password: event.target.value
+                                })
+                            }}
+                            required
+                        >
+                        </input>
+                    </div>
+                    <div className="form-group">
+                        <input
+                            type="text"
+                            className="form-control"
+                            placeholder="Nueva Contraseña"
+                            onChange={(event) => {
+                                setChangePassword({
+                                    ...changePassword,
+                                    password2: event.target.value
+                                })
+                            }}
+                            required />
+                    </div>
+                    {/* Note Content */}
+
+                    {/* Note Date */}
+                    <div className="form-group">
+                        <input
+                            type="text"
+                            className="form-control"
+                            placeholder="Confirmar Contraseña"
+                            onChange={(event) => {
+                                setChangePassword({
+                                    ...changePassword,
+                                    newPassword: event.target.value
+                                })
+                            }}
+                            required />
+
+                    </div>
+                    <button className="btn btn-primary">
+                        Guardar <i className="material-icons">
+                            assignment
+                </i>
+                    </button>
+                </form>
             </div>
-        )
-    }
+        </div>
+    );
 }
+
+export default CambioClave;
+
