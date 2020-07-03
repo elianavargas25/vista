@@ -34,8 +34,6 @@ function App() {
         <Route path="/claveCambio" component={CambiarClave} />
         <Route path="/movimiento" component={movimiento} />
       </div>
-
-      <Route path="/" exact component={inicio} />
     </Router>
 
   );

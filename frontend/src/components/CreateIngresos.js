@@ -79,6 +79,7 @@ export default class CreateIngreso extends Component {
                 .catch(err => alert(err))
         }
         window.location.href = '/ingresos/';
+        ReactDOM.render(<App />, document.getElementById('root'));
 
     }
 
