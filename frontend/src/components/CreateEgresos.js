@@ -89,6 +89,7 @@ export default class CreateEgresos extends Component {
                     ReactDOM.render(<App />, document.getElementById('root'));
                     alert('Egreso creado')
                 })
+
                 .catch(err => alert(err))
         }
         window.location.href = '/egresos';

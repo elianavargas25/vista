@@ -48,6 +48,7 @@ export default class NotesList extends Component {
                                     </p>
                                     <p>
                                         Fecha:  {(note.date)}
+
                                     </p>
                                 </div>
                                 <div className="card-footer">
