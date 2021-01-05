@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "anychart-react": "^1.4.1",
-    "axios": "^0.19.1",
+    "axios": "^0.21.1",
     "bootstrap": "^4.4.1",
     "moment": "^2.27.0",
     "now": "^19.1.1",
